@@ -7,26 +7,43 @@
 	<link href="vendor/bootstrap/dist/css/bootstrap-theme.min.css" rel="stylesheet">
 	<link href="css/main.css" rel="stylesheet">
 </head>
-<body>
+<body ng-cloak>
 	<div class="container">
-		<div class="page-header">
-			<h1>
-				 <img class="photo" src="{{::$ctrl.todo.userPhoto}}">
-				{{::$ctrl.todo.user}}'s To Do List
-			</h1>
-		</div>
+		<div ng-include="'page-header.html'"></div>
+		<!--<div class="page-header">-->
+			<!--<h1>-->
+				 <!--<img class="photo" ng-src="{{$ctrl.todo.userPhoto}}">-->
+				<!--{{::$ctrl.todo.user}}'s To Do List-->
+				<!--<span class="label label-default"-->
+					  <!--ng-hide="$ctrl.incompleteCount($ctrl.todo.items) === 0"-->
+					  <!--ng-class="$ctrl.warningLevel($ctrl.todo.items)">-->
+					<!--{{$ctrl.incompleteCount($ctrl.todo.items)}}-->
+				<!--</span>-->
+			<!--</h1>-->
+		<!--</div>-->
 		<div class="panel">
 			<form novalidate name="newTask">
 				<div class="form-group">
 					<label for="action">Action:</label>
 					<div class="input-group">
-						<input id="action" name="action" class="form-control" />
+						<input
+								id="action" name="action"
+								class="form-control"
+								ng-model="$ctrl.newItem.action" />
 						<span class="input-group-btn">
-							<button class="btn btn-primary">Add</button>
-						</span>
+							<button
+							   class="btn btn-primary"
+							   ng-click="$ctrl.addNewItem($ctrl.todo.items, $ctrl.newItem)"
+							   ng-disabled="!$ctrl.newItem.action">Add
+					   		</button>
+      					</span>
 					</div>
 				</div>
 			</form>
+			<!--<pre>-->
+				<!--{{newTask | json}}-->
+				<!--{{newTask.action | json}}-->
+			<!--</pre>-->
 		</div>
 
 		<div class="panel panel-primary">
@@ -34,35 +51,13 @@
 				<span class="glyphicon glyphicon-tasks" aria-hidden="true"></span> To Do List
 			</div>
 			<div class="panel-body">
-				<table class="table table-striped">
-					<thead>
-						<tr>
-							<th>Description</th>
-							<th>Done</th>
-							<th class="text-right">Commands</th>
-						</tr>
-					</thead>
-					<tbody>
-						<tr ng-repeat="item in $ctrl.todo.items">
-							<td>{{item.action}}</td>
-							<td>{{item.done ? "Yes" : "No"}}</td>
-							<td class="text-right">
-								<button 
-									type="button" 
-									class="btn btn-primary">
-									<span class="glyphicon glyphicon-edit" aria-hidden="true"
-									title="Edit"></span>
-								</button>
-								<button 
-									type="button" 
-									class="btn btn-danger">
-									<span class="glyphicon glyphicon-trash" aria-hidden="true"
-									title="Delete"></span>
-								</button>
-							</td>
-						</tr>
-					</tbody>
-				</table>
+
+				<task-list></task-list>
+
+				<label>
+					<input type="checkbox" ng-model="$ctrl.showComplete"/>
+					Show Complete
+				</label>
 
 				<!-- <p ng-bind="$ctrl.todo.user"></p>
 				<p ng-bind-template="{{$ctrl.todo.user}} - {{$ctrl.todo.userPhoto}}"></p>
